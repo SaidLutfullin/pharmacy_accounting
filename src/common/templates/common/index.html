@@ -1,0 +1,31 @@
+{% extends 'common/base.html' %}
+
+{% block title%}
+Права
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <h1>Привет!</h1>
+    <p><b>Имя пользователя:</b> {{ user.username }}</p>
+    <p><b>Имя:</b> {{ user.first_name }}</p>
+    <p><b>Фамилия:</b> {{ user.last_name }}</p>
+    <p><b>Отчество:</b> {{ user.middle_name }}</p>
+    <p><b>Специальность:</b> {{ user.speciality }}</p>
+    {% if user.department.all %}
+        <span><b>Отделения:</b></span>
+    <ul>
+        {% for department in user.department.all %}
+        <li>{{ department.name }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>Отделений нет</p>
+    {% endif %}
+
+
+
+
+</div>
+
+{% endblock %}

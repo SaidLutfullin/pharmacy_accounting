@@ -1,0 +1,44 @@
+{% extends 'common/base.html' %}
+
+{% block title%}
+{% if new_user %}
+Создание нового сотрудника
+{% else %}
+Редактировать профиль сотрудника
+{% endif %}
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    {% if new_user %}
+    <h1>Создание нового сотрудника</h1>
+    {% else %}
+    <h1>Редактировать профиль сотрудника</h1>
+    {% endif %}
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="row align-items-start">
+          <div class="col">
+            <div class="container">
+              <table class="table table-sm">
+                <tbody>
+                  {% for field in form %}
+                  {% if field.name != 'password'%}
+                  <tr>
+                    <td>{{ field.label_tag }}</td>
+                    <td>{{ field }} {{ field.errors }} </td>
+                  </tr>
+                  {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>            
+          </div>
+          <div class="col">
+          </div>
+        </div>
+        <p><input type="submit" class="btn btn-outline-secondary" value="Сохранить"></p>
+    </form>
+</div>
+{% endblock %}

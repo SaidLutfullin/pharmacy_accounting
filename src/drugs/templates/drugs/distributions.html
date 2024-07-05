@@ -1,0 +1,120 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title%}
+Распределения
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <div class="row align-items-start">
+        <div class="col-5">
+            <div class="row">
+                <div class="container w-75 float-start">
+                    {% if mode == 'recalling' %}
+                    <h3>Отозвать распределение</h3>
+                    {% elif mode == 'write_off' %}
+                    <h3>Списать</h3>
+                    {% else %}
+                    <h3>Новое распределение</h3>
+                    {% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        {% if mode == 'recalling' %}
+                        <p><input class="btn btn-outline-secondary"
+                            type="submit"
+                            name="drug_save"
+                            value="Отозвать">
+                        <a class="btn btn-outline-warning"
+                           href="{% url 'distributions' shipment_id=shipment.pk %}">Отмена</a>
+                        {% elif mode == 'write_off' %}
+                        <p><input class="btn btn-outline-secondary"
+                            type="submit"
+                            name="drug_save"
+                            value="Списать">
+                        <a class="btn btn-outline-warning"
+                           href="{% url 'distributions' shipment_id=shipment.pk %}">Отмена</a>
+                        {% else %}
+                        <p><input class="btn btn-outline-secondary"
+                                  type="submit"
+                                  name="drug_save"
+                                  value="Распределить">
+                        {% endif %}
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+            <div class="container">
+                <h1>Поставка</h1> 
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Наименование</th>
+                            <th>Единица измерения</th>
+                            <th>Текущее количество</th>
+                            <th>Не распределено</th>
+                            <th>Срок годности</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{shipment.drug.name}}</td>
+                            <td>{{shipment.drug.unit.name}}</td>
+                            <td>{{shipment.current_amount}}</td>
+                            <td>{{shipment.undistributed_amount}}</td>
+                            <td
+                            {% if shipment.is_expired == "True" %}
+                                class="table-danger"
+                            {% elif shipment.is_expired == "Soon" %}
+                                class="table-warning"
+                            {% endif %}
+                            >{{shipment.use_by_date|date:"d.m.Y"}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a class="btn btn-outline-secondary" href="{% url 'distributions_write_off' shipment_id=shipment.pk %}">Списать товар</a>
+            </div>
+
+            {% if distributions %}
+            <div class="container my-4">
+                <h1>Распределения</h1> 
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Отделение</th>
+                            <th>Изначальное количество</th>
+                            <th>Текущее количество</th>
+                            <th>Отозвать</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {% for distribution in distributions %}
+                        <tr>
+                            <td>{{distribution.department.name}}</td>
+                            <td>{{distribution.initial_amount}}</td>
+                            <td>{{distribution.amount}}</td>
+                            <td>
+                                {% if distribution.amount %}
+                                <a class="btn btn-light"
+                                    href="{% url 'distributions' distribution_id=distribution.pk shipment_id=shipment.pk%}">Отозвать</a>
+                                {% else %}
+                                <p><b>недоступно</b></p>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <h3>Распределений пока нет</h3>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

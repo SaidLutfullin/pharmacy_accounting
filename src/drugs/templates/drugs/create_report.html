@@ -1,0 +1,17 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title%}
+Отчеты
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <h1>Создать отчет</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input class="btn btn-outline-secondary" type="submit" value="Создать отчет"></p>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'common/base.html' %}
+
+{% block title%}
+Права
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <h1>Привет, {{request.user.username}}</h1>
+    <h1>{{employee}}</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <h4>Новая форма:</h4>
+        <div class="card my-2 p-2">
+        {{ form.as_p }}
+        </div>
+        <p><input class="btn btn-outline-secondary" type="submit" value="Сохранить"></p>
+    </form>
+
+</div>
+{% endblock %}

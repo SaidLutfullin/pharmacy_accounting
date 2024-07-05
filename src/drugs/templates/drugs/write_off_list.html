@@ -1,0 +1,68 @@
+{% extends 'common/base.html' %}
+
+{% block title%}
+Списания
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <h1>Списания</h1>
+    <div class="container my-4 ">
+        <form class="" id="search-form" role="search" action="">
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label for="from_date" class="col-form-label">За период</label>
+                </div>
+                <div class="col-auto">
+                    <label for="from_date" class="col-form-label">с</label>
+                </div>
+                <div class="col-auto">
+                    <input type="date" id="from_date" name="from_date" class="form-control" value="{{from_date}}">
+                </div>
+                <div class="col-auto">
+                    <label for="to_date" class="col-form-label">по</label>
+                </div>
+                <div class="col-auto">
+                    <input type="date" id="to_date" name="to_date" class="form-control mx-2" value="{{to_date}}">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="w-100 btn btn-outline-secondary">Показать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Единица измерения</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+                <th>Дата</th>
+                <th>Причина</th>
+                {% if can_delete %}
+                <th>Удалить</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for write_off in write_offs %}
+            <tr>
+                <td>{{write_off.shipment.drug.name}}</td>
+                <td>{{write_off.shipment.drug.unit.name}}</td>
+                <td>{{write_off.amount}}</td>
+                <td>{{write_off.total_price}}</td>
+                <td>{{write_off.date|date:"d.m.Y"}}</td>
+                <td>{{write_off.reason}}</td>
+                {% if can_delete %}
+                <td>
+                    <a href="{% url 'delete_write_off' write_off_id=write_off.id %}" class="btn btn-light">❌</a>
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'common/inc/_pagination.html' %}
+</div>
+{% endblock %}

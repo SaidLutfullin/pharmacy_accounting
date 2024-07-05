@@ -1,0 +1,39 @@
+{% extends 'common/base.html' %}
+
+{% block title%}
+Отмена списания
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <h1>Отмена списания</h1>
+    <form method="post">{% csrf_token %}
+        <p>Вы уверены, что хотите отменить списание?</p>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Единица измерения</th>
+                    <th>Количество</th>
+                    <th>Сумма</th>
+                    <th>Дата</th>
+                    <th>Причина</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{write_off.shipment.drug.name}}</td>
+                    <td>{{write_off.shipment.drug.unit.name}}</td>
+                    <td>{{write_off.amount}}</td>
+                    <td>{{write_off.total_price}}</td>
+                    <td>{{write_off.date|date:"d.m.Y"}}</td>
+                    <td>{{write_off.reason}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <input class="btn btn-outline-secondary" type="submit" value="Подтверждаю">
+    </form>
+</div>
+{% endblock %}

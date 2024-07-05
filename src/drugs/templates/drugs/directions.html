@@ -1,0 +1,63 @@
+{% extends 'profiles/admin_panel.html' %}
+
+{% load static %}
+
+{% block title%}
+Направления
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="container">
+    <div class="row align-items-start">
+        <div class="col-5">
+            <div class="row">
+                <div class="container w-75 float-start">
+                    {% if editing %}
+                    <h3>Редактировать направление</h3>
+                    {% else %}
+                    <h3>Новое направление</h3>
+                    {% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <p><input class="btn btn-outline-secondary"
+                                  type="submit"
+                                  name="drug_save"
+                                  value="Сохранить">
+                        {% if editing %}
+                        <a class="btn btn-outline-warning"
+                           href="{% url 'directions' %}">Отмена</a>
+                        {% endif %}
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-7">
+            <h3>Направления</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="align-middle">Направление</th>
+                        <th class="align-middle w-25" >Действие</th>
+                    </tr>
+                </thead>
+                {% for direction in directions %}
+                <tbody>
+                    <tr>
+                        <td class="align-middle">{{direction.name}}</td>
+                        <td>
+                            <div class="container">
+                                <a href="{% url 'update_directions' direction_id=direction.id %}" class="btn btn-light">✏️</a>
+                                <a href="{% url 'delete_directions' direction_id=direction.id%}" class="btn btn-light">❌</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

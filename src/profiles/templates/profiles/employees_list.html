@@ -1,0 +1,38 @@
+{% extends 'profiles/admin_panel.html' %}
+
+{% block title%}
+Все сотрудники
+{% endblock %}
+
+{% block admin_content %}
+<div class="container">
+    <h2>Все сотрудники</h2>
+    <a class="btn btn-outline-secondary my-2" href="{% url 'employee_create' %}">Новый сотрудник</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Отчетсво</th>
+                <th>Специальность</th>
+                <th>Редактировать данные сотрудника</th>
+                <th>Редактировать права</th>
+                <th>Удалить</th>
+            </tr>
+        </thead>
+        {% for employee in employees %}
+        <tbody>
+            <tr>
+                <td>{{employee.first_name}}</td>
+                <td>{{employee.last_name}}</td>
+                <td>{{employee.middle_name}}</td>
+                <td>{{employee.speciality}}</td>
+                <td><a href="{% url 'employee_update' user_id=employee.pk %}">Редактировать сотрудника</a></td>
+                <td><a href="{% url 'permissions' user_id=employee.pk %}">Редактировать права</a></td>
+                <td><a class="btn btn-light" href="{% url 'employee_delete' user_id=employee.pk %}">❌</a></td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

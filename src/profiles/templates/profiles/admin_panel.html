@@ -1,0 +1,56 @@
+{% extends 'common/base.html' %}
+
+{% block title%}
+Админ панель
+{% endblock %}
+
+{% block main %}
+<div>
+
+    <div class="sidebar d-flex flex-column flex-shrink-0 p-3 bg-light">
+        <h2 class="fs-4">Админ панель</h2>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li>
+                <a href="{% url 'employees_list' %}"
+                   {% if employees %}
+                        class="nav-link active"
+                   {% else %}
+                        class="nav-link link-dark"
+                   {% endif %}
+                >
+                    Сотрудники
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'departments_list' %}"
+                    {% if departments %}
+                        class="nav-link active"
+                    {% else %}
+                        class="nav-link link-dark"
+                    {% endif %}
+                >
+                    Отделения
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'directions' %}"
+                    {% if directions %}
+                        class="nav-link active"
+                    {% else %}
+                        class="nav-link link-dark"
+                    {% endif %}
+                >
+                    Направления
+                </a>
+            </li>
+        </ul>
+        <hr>
+    </div>
+
+    <div class="mt-2">
+        {% block admin_content %}{% endblock %}
+    </div>
+
+</div>
+{% endblock %}

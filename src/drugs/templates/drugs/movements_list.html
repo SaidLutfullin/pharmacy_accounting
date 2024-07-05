@@ -1,0 +1,79 @@
+{% extends 'common/base.html' %}
+
+{% block title%}
+Расходы
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <h1>Расходы</h1>
+    <div>
+        <a class="btn btn-outline-secondary my-2" href="{% url 'distributions_list' %}">Создать расход</a>
+        <a class="btn btn-outline-secondary my-2" href="{% url 'reports_types_list' %}">Отчеты</a>
+    </div>
+    <div class="container my-4 ">
+        <form class="" id="search-form" role="search" action="">
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label for="from_date" class="col-form-label">За период</label>
+                </div>
+                <div class="col-auto">
+                    <label for="from_date" class="col-form-label">с</label>
+                </div>
+                <div class="col-auto">
+                    <input type="date" id="from_date" name="from_date" class="form-control" value="{{from_date}}">
+                </div>
+                <div class="col-auto">
+                    <label for="to_date" class="col-form-label">по</label>
+                </div>
+                <div class="col-auto">
+                    <input type="date" id="to_date" name="to_date" class="form-control mx-2" value="{{to_date}}">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="w-100 btn btn-outline-secondary">Показать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Единица измерения</th>
+                <th>Отделение</th>
+                <th>Направление</th>
+                <th>Сотрудник</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+                <th>Дата</th>
+                {% if can_delete %}
+                <th>Отмена</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for movement in movements %}
+            <tr>
+                <td>{{movement.shipment.drug.name}}</td>
+                <td>{{movement.shipment.drug.unit.name}}</td>
+                <td>{{movement.department.name}}</td>
+                <td>{{movement.direction.name}}</td>
+                <td>{{movement.employee.last_name}}
+                    {{movement.employee.first_name}}
+                    {{movement.employee.middle_name}}
+                    - {{movement.employee.speciality}}</td>
+                <td>{{movement.amount}}</td>
+                <td>{{movement.total_price}}</td>
+                <td>{{movement.date|date:"d.m.Y"}}</td>
+                {% if can_delete %}
+                <td>
+                    <a href="{% url 'delete_movement' movement_id=movement.id %}" class="btn btn-light">❌</a>
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'common/inc/_pagination.html' %}
+</div>
+{% endblock %}

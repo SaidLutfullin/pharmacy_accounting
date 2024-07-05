@@ -1,0 +1,7 @@
+__pycache__/
+db_data/db.sqlite3
+.env
+drug_accounting/media/
+drug_accounting/static/
+drug_accounting/drug_accounting/.env
+venv/

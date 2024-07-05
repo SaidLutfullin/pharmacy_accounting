@@ -1,0 +1,46 @@
+{% extends 'common/base.html' %}
+
+{% block title%}
+Отмена расхода
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <h1>Отмена расхода</h1>
+    <form method="post">{% csrf_token %}
+        <p>Вы уверены, что хотите отменить расход?</p>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Единица измерения</th>
+                    <th>Отделение</th>
+                    <th>Направление</th>
+                    <th>Сотрудник</th>
+                    <th>Количество</th>
+                    <th>Сумма</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{movement.shipment.drug.name}}</td>
+                    <td>{{movement.shipment.drug.unit.name}}</td>
+                    <td>{{movement.department.name}}</td>
+                    <td>{{movement.direction.name}}</td>
+                    <td>{{movement.employee.last_name}}
+                        {{movement.employee.first_name}}
+                        {{movement.employee.middle_name}}
+                        - {{movement.employee.speciality}}</td>
+                    <td>{{movement.amount}}</td>
+                    <td>{{movement.total_price}}</td>
+                    <td>{{movement.date|date:"d.m.Y"}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <input class="btn btn-outline-secondary" type="submit" value="Подтверждаю">
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title%}
+Поставки
+{% endblock %}
+
+{% block styles %}
+<link type="text/css" href="{% static 'drugs/css/styles.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <h1>Все поставки</h1>
+    <div><a class="btn btn-outline-secondary my-2" href="{% url 'shipment_create' %}">Новая поставка</a></div>
+    <div class="container mb-3">
+        <a {% if mode == none %}
+            class="btn btn-primary"
+            {% else %}
+            class="btn btn-outline-primary"
+            {% endif %}
+            href="{% url 'shipments_list' %}">Показать только то, что в наличии</a>
+        <a {% if mode == "all" %}
+            class="btn btn-primary"
+            {% else %}
+            class="btn btn-outline-primary"
+            {% endif %}
+            class="btn btn-outline-primary" href="{% url 'shipments_list' %}?mode=all">Показать все поставки, всключая закончившиеся</a>
+        <a {% if mode == "show_run_out" %}
+            class="btn btn-primary"
+            {% else %}
+            class="btn btn-outline-primary"
+            {% endif %}
+            href="{% url 'shipments_list' %}?mode=show_run_out">Показать закончившиесся поставки</a>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Наименование препарата </th>
+                <th>Единица измерения</th>
+                <th>Дата получения</th>
+                <th>Фирма-поставщик</th>
+                <th>Приходной документ</th>
+                <th>Фирма-изготовитель</th>
+                <th>Серия препарата</th>
+                <th>Изначальное количество</th>
+                <th>Текущее количество</th>
+                <th>Не распределено</th>
+                <th>Цена за единицу</th>
+                <th>Общая сумма</th>
+                <th>Срок годности</th>
+                <th>Редактировать</th>
+            </tr>
+        </thead>
+        {% for shipment in shipments %}
+        <tbody>
+            <tr class='clickable-row' data-href="{% url 'distributions' shipment_id=shipment.pk%}">
+                <td>{{shipment.drug}}</td>
+                <td>{{shipment.drug.unit}}</td>
+                <td>{{shipment.date_of_comming|date:"d.m.Y"}}</td>
+                <td>{{shipment.provider}}</td>
+                <td>{{shipment.document}}</td>
+                <td>{{shipment.producer}}</td>
+                <td>{{shipment.serial_number}}</td>
+                <td>{{shipment.initial_amount}}</td>
+                <td>{{shipment.current_amount}}</td>
+                <td>{{shipment.undistributed_amount}}</td>
+                <td>{{shipment.prise_for_unit}}</td>
+                <td>{{shipment.total_price|floatformat:2}}</td>
+
+                <td
+                {% if shipment.is_expired == "True" %}
+                    class="table-danger"
+                {% elif shipment.is_expired == "Soon" %}
+                    class="table-warning"
+                {% endif %}
+                >{{shipment.use_by_date|date:"d.m.Y"}}</td>
+                <td>{% if shipment.editable %}
+                    <a class="btn btn-light"
+                       href="{% url 'shipment_update' shipment_id=shipment.pk %}">✏️</a>
+                    {% else %}
+                    <p><b>недоступно</b></p>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% include 'common/inc/_pagination.html' %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="{% static 'drugs/js/main.js' %}"></script>
+{% endblock %}

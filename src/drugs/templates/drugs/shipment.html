@@ -1,0 +1,19 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title%}
+Поставка
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <h1>Поставка</h1>
+    <div class="container w-50 float-start">
+        <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p><input class="btn btn-outline-secondary" type="submit" value="Сохранить"></p>
+    </form>
+    </div>
+</div>
+{% endblock %}

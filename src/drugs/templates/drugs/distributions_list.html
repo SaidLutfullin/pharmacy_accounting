@@ -1,0 +1,72 @@
+{% extends 'common/base.html' %}
+{% load static %}
+{% block styles %}
+<link type="text/css" href="{% static 'drugs/css/styles.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block title%}
+Распределения
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <h1>Распределения
+    {% if selected_department %}
+    на отделение {{selected_department.name}}
+    {% endif %}
+    </h1>
+
+    <div class="container my-3">
+        {% for department in departments %}
+        <a
+        {% if department == selected_department %}
+        class="btn btn-primary"
+        {% else%}
+        class="btn btn-outline-primary"
+        {% endif %}
+        href="{% url 'distributions_list' %}?department_id={{department.id}}">{{department.name}}</a>
+        {% endfor %}
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Единица измерения</th>
+                <th>Изначальное количество</th>
+                <th>Текущее количество</th>
+                <th>Срок годности</th>
+            </tr>
+        </thead>
+        {% if distributions %}
+        <tbody>
+        {% for distribution in distributions %}
+            {% if distribution.amount %}
+            <tr class='clickable-row'
+                data-href="{% url 'movement_create' shipment_id=distribution.shipment.pk department_id=selected_department.pk %}">
+            {% else %}
+            <tr class="table-active">
+            {% endif %}
+                <td>{{distribution.shipment.drug.name}}</td>
+                <td>{{distribution.shipment.drug.unit.name}}</td>
+                <td>{{distribution.initial_amount}}</td>
+                <td>{{distribution.amount}}</td>
+                <td
+                {% if distribution.shipment.is_expired == "True" %}
+                    class="table-danger"
+                {% elif distribution.shipment.is_expired == "Soon" %}
+                    class="table-warning"
+                {% endif %}
+                >{{distribution.shipment.use_by_date|date:"d.m.Y"}}</td>
+            </tr>
+        {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+    {% include 'common/inc/_pagination.html' %}
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="{% static 'drugs/js/main.js' %}"></script>
+{% endblock %}

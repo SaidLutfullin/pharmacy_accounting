@@ -1,0 +1,25 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+
+
+{% block title%}
+Поставки
+{% endblock %}
+
+{% block main%}
+<div class="container">
+    <h1>Отчеты</h1>
+    <ul>
+        <li><a href="{% url 'create_report' report_type='use_by_date' %}">О сроке годности</a></li>
+        <li><a href="{% url 'create_report' report_type='presence' %}">О наличии</a></li>
+        <li><a href="{% url 'create_report' report_type='expenditure' %}">О расходе</a></li>
+        <li><a href="{% url 'create_report' report_type='expenditure_with_date' %}">О расходе с датой</a></li>
+        <li><a href="{% url 'create_report' report_type='shipment_report' %}">О приобретении</a></li>
+        <li><a href="{% url 'create_report' report_type='spent_drugs_report_all_departments' %}">По всем отделениям</a></li>
+        <li><a href="{% url 'create_report' report_type='spent_drugs_report' %}">По одному отделению</a></li>
+        <li><a href="{% url 'create_report' report_type='movement_report' %}">О движении</a></li>
+
+    </ul>
+</div>
+{% endblock %}
